@@ -8,7 +8,8 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Chilli recepty">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="theme-color" content="#b8aea4">
+<meta name="theme-color" content="#b8aea4" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#3b3431" media="(prefers-color-scheme: dark)">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <link rel="icon" href="icons/icon-192.png">
@@ -21,7 +22,8 @@
   /* Chilli-style palette: warm paper, taupe band, wine accent, bright program colours */
   --bg:#fbfaf7; --surface:#ffffff; --paper:#f4f0ea; --band:#b8aea4; --band2:#cfc5bb;
   --line:#e4ddd5; --fg:#1c1917; --ink:#44403c; --muted:#79716b;
-  --wine:#671a2b; --wine-d:#521321; --wine-bg:#f3e6e8;
+  --wine:#671a2b; --wine-d:#521321; --wine-bg:#f3e6e8; --wine-fill:#671a2b; --on-fill:#ffffff; --on-ink:#ffffff;
+  --shadow:0 1px 2px rgba(28,25,23,.06),0 6px 18px rgba(28,25,23,.06);
   --have:#2f8a5b; --have-bg:#dff1e6; --chili:#671a2b; --chili-bg:#f3e6e8; --accent:#671a2b;
   --lime:#e5ff00; --red:#ff5a4e; --pink:#d9158d; --green:#39a36b; --sky:#9bc9e6; --sun:#ffd52e;
   --chip:#f4f0ea; --bar:rgba(207,197,187,.96); --scrim:rgba(28,25,23,.45);
@@ -30,6 +32,15 @@
   --display:"Bricolage Grotesque","Geist",-apple-system,"Segoe UI",sans-serif;
   color-scheme:light;
 }
+@media (prefers-color-scheme: dark){:root{
+  --bg:#1a1715; --surface:#24201d; --paper:#2f2a26; --band:#3b3431; --band2:#5a504a;
+  --line:#3a3430; --fg:#f3eee9; --ink:#e8e1da; --muted:#a99f97;
+  --wine:#ec92a4; --wine-d:#f5b3c0; --wine-bg:#3f2128; --wine-fill:#8e2b42; --on-fill:#ffffff; --on-ink:#1a1715;
+  --have:#7dd3a2; --have-bg:#1e3a2b; --chili:#ec92a4; --chili-bg:#3f2128; --accent:#ec92a4;
+  --chip:#2f2a26; --bar:rgba(46,41,38,.96); --scrim:rgba(0,0,0,.6);
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 6px 18px rgba(0,0,0,.25);
+  color-scheme:dark;
+}}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%}
 body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.45 var(--font);-webkit-text-size-adjust:100%;overscroll-behavior-y:none}
@@ -177,24 +188,24 @@ header .sub{color:var(--ink);font-size:12.5px;margin:0}
 .stats div{display:flex;flex-direction:column}
 .stats b{font:800 26px/1 var(--display);color:var(--ink);font-variant-numeric:tabular-nums}
 .stats span{font-size:12.5px;color:var(--muted);margin-top:4px}
-.btn{background:var(--wine);color:#fff;border:0;border-radius:8px;font-weight:600;padding:10px 16px}
+.btn{background:var(--wine-fill);color:var(--on-fill);border:0;border-radius:8px;font-weight:600;padding:10px 16px}
 .btn+.btn,#b-clear,#b-reset{background:transparent;color:var(--wine);border:1.5px solid var(--wine)}
 
 
 input[type=search]{border-radius:8px;border-color:var(--line);background:var(--surface)}
 .sec h3,.shop-sec h3,.slot h4,.sb h4,.prep b{color:var(--wine);letter-spacing:.09em}
 .chip{background:var(--paper);border-radius:8px;font-weight:500}
-.chip[aria-pressed="true"]{background:var(--wine);color:#fff;border-color:var(--wine)}
+.chip[aria-pressed="true"]{background:var(--wine-fill);color:var(--on-fill);border-color:var(--wine-fill)}
 .chip[aria-pressed="true"] small{color:rgba(255,255,255,.75)}
 .seg{border-radius:8px;border:0;background:var(--paper);font-weight:600;color:var(--ink)}
-.seg[aria-pressed="true"]{background:var(--ink);color:#fff}
-#tabs .seg[data-k="ranajky"][aria-pressed="true"]{background:var(--lime);color:var(--fg)}
+.seg[aria-pressed="true"]{background:var(--ink);color:var(--on-ink)}
+#tabs .seg[data-k="ranajky"][aria-pressed="true"]{background:var(--lime);color:#1c1917}
 #tabs .seg[data-k="obed"][aria-pressed="true"]{background:var(--red);color:#fff}
 #tabs .seg[data-k="vecera"][aria-pressed="true"]{background:var(--pink);color:#fff}
 #tabs .seg[data-k="snack"][aria-pressed="true"]{background:var(--green);color:#fff}
-#tabs .seg[data-k="dezert"][aria-pressed="true"]{background:var(--sun);color:var(--fg)}
+#tabs .seg[data-k="dezert"][aria-pressed="true"]{background:var(--sun);color:#1c1917}
 .bucket h2,.alt h2{font:800 26px/1.1 var(--display);color:var(--ink);letter-spacing:-.01em}
-.card,.day,.prep,.items{border:0;border-radius:12px;box-shadow:0 1px 2px rgba(28,25,23,.06),0 6px 18px rgba(28,25,23,.06)}
+.card,.day,.prep,.items{border:0;border-radius:12px;box-shadow:var(--shadow)}
 .card{position:relative;padding:16px 16px 14px}
 .card::before{content:"";position:absolute;left:16px;top:0;width:44px;height:4px;border-radius:0 0 3px 3px;background:var(--band2)}
 .card.ready{border-left:0}
@@ -208,20 +219,20 @@ input[type=search]{border-radius:8px;border-color:var(--line);background:var(--s
 .day:nth-child(7n+1){--c:var(--lime)} .day:nth-child(7n+2){--c:var(--red)} .day:nth-child(7n+3){--c:var(--pink)}
 .day:nth-child(7n+4){--c:var(--green)} .day:nth-child(7n+5){--c:var(--sky)} .day:nth-child(7n+6){--c:var(--sun)} .day:nth-child(7n+7){--c:var(--wine)}
 .dh h3{font:800 20px/1.1 var(--display);color:var(--ink)}
-.day.today{box-shadow:0 0 0 2px var(--wine),0 6px 18px rgba(28,25,23,.08)}
+.day.today{box-shadow:0 0 0 2px var(--wine),var(--shadow)}
 .dh h3 small{color:var(--wine)}
 .mn{font-weight:600;color:var(--ink)}
 .lnk{background:var(--paper);border-radius:8px;font-weight:500}
 .warn{background:var(--paper);border-left:3px solid var(--wine);border-radius:0 8px 8px 0}
 .it input{accent-color:var(--wine)}
-.yt{background:var(--ink);color:#fff;border-radius:8px}
+.yt{background:var(--ink);color:var(--on-ink);border-radius:8px}
 .sheet{background:var(--bg)}
 .sh h2{font:800 24px/1.15 var(--display);color:var(--ink)}
 .x{background:var(--paper)}
 nav.tabbar{background:var(--bar);border-top:0}
 .tb{color:var(--ink);font-weight:500}
 .tb[aria-selected="true"]{color:var(--wine);font-weight:700}
-.badge{background:var(--wine);color:#fff}
+.badge{background:var(--wine-fill);color:var(--on-fill)}
 .nt td:not(:first-child){color:var(--wine)}
 .legal{font-size:12px;color:var(--muted);margin:22px 0 4px;border-top:1px solid var(--line);padding-top:12px}
 </style>
