@@ -1,11 +1,11 @@
 {
- "name": "Chill s Chilli",
- "short_name": "Chill s Chilli",
+ "name": "Čo uvarím s Chilli",
+ "short_name": "Čo uvarím",
  "start_url": "./",
  "scope": "./",
  "display": "standalone",
  "background_color": "#f3f5f1",
- "theme_color": "#2f6b45",
+ "theme_color": "#b8322a",
  "lang": "sk",
  "icons": [
   {
