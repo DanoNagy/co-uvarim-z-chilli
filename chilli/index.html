@@ -162,14 +162,25 @@ input[type=search]{width:100%;font:16px var(--font);padding:10px 14px;border:1px
 
 /* ---- healthy-food visuals ---- */
 .ic{width:100%;height:100%;display:block}
-.hero{padding:10px 0 4px}
-.plate{display:flex;justify-content:center;align-items:flex-end;gap:0;padding:16px 4px 12px;margin:0 -4px;border-radius:22px;
-  background:radial-gradient(120% 90% at 50% 100%,var(--have-bg) 0 55%,transparent 56%),var(--surface);border:1px solid var(--line);overflow:hidden}
-.plate span{width:clamp(44px,12.5vw,66px);aspect-ratio:1;flex:none;filter:drop-shadow(0 3px 4px rgba(0,0,0,.12))}
-.plate span:nth-child(odd){transform:translateY(-6px) rotate(-6deg)} .plate span:nth-child(even){transform:rotate(5deg)}
-@media (prefers-reduced-motion:no-preference){.plate span{animation:pop .5s cubic-bezier(.2,1.4,.4,1) both}.plate span:nth-child(2){animation-delay:.05s}.plate span:nth-child(3){animation-delay:.1s}.plate span:nth-child(4){animation-delay:.15s}.plate span:nth-child(5){animation-delay:.2s}.plate span:nth-child(6){animation-delay:.25s}.plate span:nth-child(7){animation-delay:.3s}}
-@keyframes pop{from{transform:translateY(10px) scale(.85)}}
-.ht{font:800 clamp(26px,7vw,34px)/1.08 var(--display);margin:16px 0 4px;letter-spacing:-.01em;text-wrap:balance}
+.hero{padding:6px 0 4px}
+header{position:relative;overflow:hidden;padding-top:calc(var(--sat) + 16px);padding-bottom:14px;
+  background:linear-gradient(100deg,var(--bg) 0 30%,var(--have-bg) 100%)}
+header > :not(.hdrbg){position:relative;z-index:1}
+header h1{font-size:clamp(28px,7.5vw,36px)}
+header .sub{text-shadow:0 0 6px var(--bg)}
+.hdrbg{position:absolute;inset:var(--sat) 0 0 0;pointer-events:none;z-index:0}
+.hdrbg span{position:absolute;aspect-ratio:1;filter:drop-shadow(0 3px 4px rgba(0,0,0,.14))}
+header{min-height:calc(var(--sat) + 92px)}
+.hdrbg .w2,.hdrbg .w3,.hdrbg .w4{display:none}
+@media (min-width:381px){.hdrbg .w2{display:block}}
+@media (min-width:521px){.hdrbg .w3{display:block}}
+@media (min-width:768px){.hdrbg .w4{display:block}.hdrbg span{scale:1.1}}
+/* phones: keep the status line clear of the illustrations */
+@media (max-width:520px){header .sub{max-width:calc(100% - 10.5rem)}}
+@media (max-width:380px){header .sub{max-width:calc(100% - 8.8rem)}.hdrbg span{scale:.9}}
+@media (prefers-reduced-motion:no-preference){.hdrbg span:not(.faint){animation:pop .5s cubic-bezier(.2,1.4,.4,1) both}}
+@keyframes pop{from{translate:0 10px;scale:.85}}
+.ht{font:800 clamp(26px,7vw,34px)/1.08 var(--display);margin:8px 0 4px;letter-spacing:-.01em;text-wrap:balance}
 .ht span{color:var(--have)}
 .hs{color:var(--muted);margin:0;font-size:14.5px;max-width:46ch}
 .stats{display:flex;gap:20px;margin-top:14px}
@@ -205,13 +216,13 @@ input[type=search]{width:100%;font:16px var(--font);padding:10px 14px;border:1px
 <body>
 <div class="app">
   <header>
+    <div class="hdrbg" id="hdrbg" aria-hidden="true"></div>
     <h1>Chill s <em>Chilli</em></h1>
     <div class="sub" id="sub"></div>
   </header>
   <main>
     <section class="pane" id="p-pick" aria-label="Mám doma">
       <div class="hero">
-        <div class="plate" id="plate"></div>
         <h2 class="ht">Veľa bielkovín, <span>žiadna veda.</span></h2>
         <p class="hs">Zaškrtni, čo máš v chladničke. Ukážem ti jej recepty, ktoré z toho uvaríš.</p>
         <div class="stats"><div><b id="st-all">0</b><span>receptov</span></div><div><b id="st-ch">0</b><span>s hodnotami od Chilli</span></div><div><b id="st-ok">0</b><span>uvaríš hneď</span></div></div>
@@ -386,7 +397,12 @@ function renderResults(){
   $("st-all").textContent = DATA.recipes.length; $("st-ch").textContent = DATA.recipes.filter(r=>r.src==="Chilli").length; $("st-ok").textContent = ready;
 }
 const render = () => { renderGroups(); renderResults(); };
-$("plate").innerHTML = ["vajce","avokado","steak","cottage","bobule","brokolica","ryba"].map(k => `<span>${svg(k)}</span>`).join("");
+// decorative food layer behind the header, anchored to the right edge: [icon, right rem, top %, size rem, rotate deg, class]
+// w2 = from 381px, w3 = from 521px, w4 = tablet; "faint" sits under the text
+const HDR = [["steak",3.3,2,2.6,8,""],["brokolica",0.2,6,2.2,18,""],["avokado",6.4,4,2.6,-14,""],["cottage",1.2,52,2.5,-8,""],["vajce",4.6,54,2.2,12,""],
+  ["bobule",7.8,58,2,10,"w2"],["ryba",10.2,8,2.3,-10,"w3"],["paradajka",12.6,52,2,14,"w3"],["protein",15,4,2.1,-12,"w3"],
+  ["chlieb",18,50,2.2,6,"w4"],["banan",21,6,2.3,-16,"w4"],["kura",24,46,2.3,10,"w4"],["vlocky",27.5,8,2.2,-6,"w4"],["syr",31,50,2,12,"w4"]];
+$("hdrbg").innerHTML = HDR.map(([k,r,y,s,d,c]) => `<span class="${c}" style="right:${r}rem;top:${y}%;width:${s}rem;rotate:${d}deg">${svg(k)}</span>`).join("");
 
 function openSheet(id){
   const r = byId[id]; if (!r) return;
