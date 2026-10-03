@@ -401,7 +401,7 @@ const SLICE = {
   banana:'<path d="M8 11c1.5 15.5 12.5 25 31 22.5-2.4 4.2-7.3 7.8-14 7.8C13.5 41.3 5.6 30 6.2 13z"/>',
   cheese:'<path fill-rule="evenodd" d="M5 34L37 15l7 6.5V36H5zM21 27a2.8 2.8 0 1 1 0 5.6a2.8 2.8 0 1 1 0-5.6zM33 24a2.2 2.2 0 1 1 0 4.4a2.2 2.2 0 1 1 0-4.4z"/>',
 };
-const TILE = [["avo",8,2],["egg",70,10],["fish",132,2],["apple",196,6],["meat",22,76],["broc",86,70],["banana",142,80],["straw",200,74],["cheese",66,140],["apple",134,136],["avo",196,138]];
+const TILE = [["avo",8,2],["broc",70,4],["fish",132,2],["apple",196,6],["meat",22,76],["cheese",84,84],["banana",142,80],["straw",200,74],["fish",44,140],["apple",112,136],["avo",180,138]];
 const pat = `<svg xmlns="http://www.w3.org/2000/svg" width="250" height="204" viewBox="0 0 250 204"><defs><pattern id="v" width="3.4" height="4" patternUnits="userSpaceOnUse"><rect width="1.5" height="4" fill="#000"/></pattern><pattern id="w" width="3.4" height="4" patternUnits="userSpaceOnUse"><rect width="2.6" height="4" fill="#000"/></pattern></defs><g fill="url(#v)">${
   TILE.map(([k,x,y]) => `<svg x="${x}" y="${y}" width="40" height="40" viewBox="0 0 48 48" overflow="visible">${SLICE[k]}</svg>`).join("")}</g></svg>`;
 document.documentElement.style.setProperty("--pat", `url("data:image/svg+xml;utf8,${encodeURIComponent(pat)}")`);
