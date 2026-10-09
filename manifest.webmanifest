@@ -1,6 +1,6 @@
 {
- "name": "Chill s Chilli",
- "short_name": "Chill s Chilli",
+ "name": "Recepty s Chilli",
+ "short_name": "Recepty s Chilli",
  "start_url": "./",
  "scope": "./",
  "display": "standalone",
