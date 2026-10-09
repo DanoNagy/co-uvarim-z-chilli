@@ -209,6 +209,33 @@ header h1{font-size:clamp(28px,7.5vw,36px);letter-spacing:-.02em}
 .legal{font-size:12px;color:var(--muted);margin:22px 0 4px;border-top:1px solid var(--line);padding-top:12px}
 .sh .shi{width:44px;height:44px;flex:none}
 .sh{align-items:center}
+
+/* ---- my recipes: favourites, tried, notes ---- */
+.fsep{flex:none;width:1px;background:var(--line);margin:4px 2px}
+.tog{display:inline-flex;align-items:center;gap:5px}
+.tog small{color:inherit;opacity:.7;font-variant-numeric:tabular-nums}
+.mk-i{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+#f-fav[aria-pressed="true"]{background:#f2b705;border-color:#f2b705;color:#1d2420}
+.marks{display:inline-flex;gap:4px;margin-left:6px;vertical-align:2px}
+.marks i{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;font-style:normal}
+.marks .fv{background:#fff3c4;color:#b07d00} .marks .tr{background:var(--have-bg);color:var(--have)} .marks .nt2{background:var(--chip);color:var(--muted)}
+.marks svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linejoin:round;stroke-linecap:round}
+.marks .fv svg{fill:currentColor;stroke-width:1.5}
+.mine{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 4px}
+.mbtn{display:inline-flex;align-items:center;gap:6px;border:1.5px solid var(--line);background:var(--surface);border-radius:999px;padding:8px 14px;font-size:14.5px;font-weight:600;min-height:40px}
+.mbtn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.mbtn.on.fav{background:#fff3c4;border-color:#f2b705;color:#8a6200} .mbtn.on.fav svg{fill:#f2b705;stroke:#b07d00}
+.mbtn.on.tried{background:var(--have-bg);border-color:var(--have);color:var(--have)}
+.mdate{font-size:12.5px;color:var(--muted);align-self:center}
+.mnote{width:100%;min-height:84px;font:16px/1.4 var(--font);padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--fg);resize:vertical}
+.msaved{font-size:12px;color:var(--have);min-height:16px;margin-top:4px}
+.unote{background:var(--chip);border-radius:10px;padding:8px 10px;font-size:13.5px;color:var(--fg);margin:0}
+.unote b{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);display:block;margin-bottom:2px}
+.backup{margin-top:28px;border-top:1px solid var(--line);padding-top:14px}
+.backup h3{font:700 12px/1 var(--font);text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin:0 0 6px}
+.backup p{font-size:13.5px;color:var(--muted);margin:0 0 6px;max-width:60ch}
+.bmsg{color:var(--have)!important;font-weight:600}
+@media (prefers-color-scheme: dark){.marks .fv{background:#3d3210;color:#f2c94c}.mbtn.on.fav{background:#3d3210;border-color:#c99a06;color:#f2c94c}#f-fav[aria-pressed="true"]{color:#1d2420}}
 </style>
 </head>
 <body>
@@ -237,6 +264,9 @@ header h1{font-size:clamp(28px,7.5vw,36px);letter-spacing:-.02em}
       <div class="fbar">
       <div class="rsearch"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L20 20"/></svg><input type="search" id="rq" placeholder="Hľadaj recept alebo surovinu…" aria-label="Hľadaj recept alebo surovinu" autocomplete="off" enterkeyhint="search"></div>
       <div class="filters" id="tabs">
+        <button class="seg tog" id="f-fav" aria-pressed="false" type="button"><svg class="mk-i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z"/></svg>Obľúbené <small id="n-fav"></small></button>
+        <button class="seg tog" id="f-tried" aria-pressed="false" type="button"><svg class="mk-i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Vyskúšané <small id="n-tried"></small></button>
+        <span class="fsep" aria-hidden="true"></span>
         <button class="seg" data-k="" aria-pressed="true" type="button">Všetko</button>
         <button class="seg" data-k="ranajky" aria-pressed="false" type="button">Raňajky</button>
         <button class="seg" data-k="obed" aria-pressed="false" type="button">Obed</button>
@@ -249,6 +279,13 @@ header h1{font-size:clamp(28px,7.5vw,36px);letter-spacing:-.02em}
         <label class="sortl">Zoradiť <select id="sort"><option value="match">podľa zhody</option><option value="prot">najviac bielkovín</option><option value="kcal">najmenej kcal</option></select></label></div>
       <div class="legend">≈ = odhad, lebo časť gramáží v recepte chýba.</div>
       <div id="out"></div>
+      <section class="backup" aria-label="Záloha">
+        <h3>Moje dáta</h3>
+        <p>Obľúbené, vyskúšané, poznámky, suroviny doma a nákup sú uložené len v tomto zariadení. Občas si ich zálohuj, napríklad do Nextcloudu alebo do poznámok.</p>
+        <div class="tools"><button class="btn" id="b-save" type="button">Zálohovať</button><button class="btn" id="b-load" type="button">Obnoviť zo zálohy</button></div>
+        <input type="file" id="f-load" accept=".json,application/json,text/plain" hidden>
+        <p class="bmsg" id="bmsg" role="status"></p>
+      </section>
       <p class="legal">Neoficiálna osobná appka. Recepty a hodnoty pochádzajú z verejných príspevkov @chilli_fitness22 na Instagrame a YouTube, pri každom recepte je odkaz na originál.</p>
     </section>
     <section class="pane wide" id="p-plan" aria-label="Jedálniček" hidden>
@@ -375,10 +412,27 @@ function card(r, missing){
   const ics = recipeIcons(r);
   const thumb = `<span class="thumb">${svg(ics[0]||"vajce","ic t1")}${ics[1]?svg(ics[1],"ic t2"):""}${ics[2]?svg(ics[2],"ic t3"):""}</span>`;
   return `<button type="button" class="card${missing.length?"":" ready"}" data-id="${esc(r.id)}">${thumb}
-    <span class="name">${esc(r.n)}</span>${nut}${pbar(r)}
+    <span class="name">${esc(r.n)}${marks(r.id)}</span>${nut}${pbar(r)}
     <div class="meta">${esc(meta)}</div>${miss}</button>`;
 }
 
+// my recipes: { id: {f:1 fav, t:"YYYY-MM-DD" tried, n:"note"} } stored on this device
+const MKEY = "moje.v1";
+let MY = {};
+try { MY = JSON.parse(localStorage.getItem(MKEY)) || {}; } catch(e) {}
+const saveMy = () => { try { localStorage.setItem(MKEY, JSON.stringify(MY)); } catch(e) {} };
+const my = id => MY[id] || {};
+function setMy(id, patch){
+  const m = {...my(id), ...patch};
+  for (const k of Object.keys(m)) if (!m[k]) delete m[k];
+  if (Object.keys(m).length) MY[id] = m; else delete MY[id];
+  saveMy();
+}
+const STAR = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z"/></svg>';
+const CHECK = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+const PEN = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/></svg>';
+const marks = id => { const m = my(id); const h = (m.f?`<i class="fv" title="Obľúbený">${STAR}</i>`:"")+(m.t?`<i class="tr" title="Vyskúšaný">${CHECK}</i>`:"")+(m.n?`<i class="nt2" title="Má poznámku">${PEN}</i>`:""); return h?`<span class="marks">${h}</span>`:""; };
+let fFav = false, fTried = false;
 // diacritics-insensitive keyword search over name + ingredients
 const plR = n => n===1 ? "recept" : (n>=2 && n<=4) ? "recepty" : "receptov";
 const fold = s => s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
@@ -387,21 +441,24 @@ let rq = "";
 // Slovak endings vary (jablko/jablká, ryža/ryžou), so drop trailing vowels; eggs have several stems
 const stem = w => { const s = w.length >= 4 ? w.replace(/[aeiouy]+$/, "") : w; return s.length >= 3 ? s : w; };
 const toTest = w => /^vaj/.test(w) ? (h => /vaj(c|ic|ec)/.test(h)) : (h => h.includes(stem(w)));
-const matchQ = r => fold(rq).split(/\s+/).filter(Boolean).map(toTest).every(f => f(r.hay));
+const matchQ = r => { const h = r.hay + " " + fold(my(r.id).n || ""); return fold(rq).split(/\s+/).filter(Boolean).map(toTest).every(f => f(h)); };
 function renderResults(){
-  const searching = rq.trim().length > 0;
-  const rows = DATA.recipes.filter(r => r.i.length && (!cat || r.k.includes(cat)) && (!onlyFull || r.full) && (!searching || matchQ(r)))
+  const searching = rq.trim().length > 0 || fFav || fTried;
+  const rows = DATA.recipes.filter(r => r.i.length && (!cat || r.k.includes(cat)) && (!onlyFull || r.full) && (!rq.trim() || matchQ(r)) && (!fFav || my(r.id).f) && (!fTried || my(r.id).t))
     .map(r => { const missing = r.i.filter(i => !sel.has(i)); return {r, missing, haveN: r.i.length - missing.length}; });
   const buckets = [["Môžeš variť hneď","máš všetky hlavné suroviny",0],["Chýba 1 surovina","stačí rýchly nákup alebo zámena",1],["Chýba 2 suroviny","",2]];
   if (searching) buckets.push(["Chýba viac surovín","",-1]);
-  let html = searching ? `<p class="qinfo"><b>${rows.length}</b> ${plR(rows.length)} pre „${esc(rq.trim())}“</p>` : "";
+  const what = [rq.trim() && `„${esc(rq.trim())}“`, fFav && "obľúbené", fTried && "vyskúšané"].filter(Boolean).join(" · ");
+  let html = searching ? `<p class="qinfo"><b>${rows.length}</b> ${plR(rows.length)} · ${what}</p>` : "";
+  const nf = Object.values(MY).filter(m => m.f).length, nt = Object.values(MY).filter(m => m.t).length;
+  $("n-fav").textContent = nf || ""; $("n-tried").textContent = nt || "";
   for (const [title, sub, n] of buckets){
     const cmp = sortBy === "prot" ? (a,b) => (b.r.b||0) - (a.r.b||0) : sortBy === "kcal" ? (a,b) => (a.r.kc||9e9) - (b.r.kc||9e9) : (a,b) => b.haveN - a.haveN || pshare(b.r) - pshare(a.r);
     const list = rows.filter(x => n < 0 ? x.missing.length > 2 : x.missing.length === n).sort(cmp);
     if (!list.length) continue;
     html += `<section class="bucket"><h2>${title}</h2><div class="bs">${list.length} ${plR(list.length)}${sub?" · "+sub:""}</div><div class="list">${list.slice(0,40).map(x=>card(x.r,x.missing)).join("")}</div></section>`;
   }
-  $("out").innerHTML = (searching && !rows.length) ? html + `<div class="empty">Nič som nenašiel. Skús iné slovo, napríklad „tvaroh“, „lasagne“ alebo „kuracie“, alebo zruš filter kategórie.</div>`
+  $("out").innerHTML = (searching && !rows.length) ? html + `<div class="empty">${(fFav||fTried) && !rq.trim() ? `Zatiaľ tu nič nemáš. Otvor recept a ťukni na ${fFav?"„Obľúbené“":"„Vyskúšané“"}.` : "Nič som nenašiel. Skús iné slovo, napríklad „tvaroh“, „lasagne“ alebo „kuracie“, alebo zruš filter."}</div>`
     : html || `<div class="empty">Žiadny recept, ktorému by chýbali najviac 2 suroviny. Pridaj suroviny v záložke Mám doma, zruš filter, alebo vyhľadaj recept podľa názvu.</div>`;
   const ready = DATA.recipes.filter(r => r.i.length && r.i.every(i => sel.has(i))).length;
   $("badge").textContent = ready; $("badge").hidden = !ready;
@@ -436,7 +493,16 @@ function openSheet(id){
     <tr><td>celé jedlo (${dav(r.d)})</td><td>${approx(r)}${r.kt}</td><td>${approx(r)}${r.bt} g</td></tr></table>
     <div class="src">${SRC[r.src]||""}${r.pr?` Predpoklad: ${esc(r.pr)}`:""}</div>` : "";
   const missing = new Set(r.i.filter(i => !sel.has(i)));
-  $("sb").innerHTML = `${nut}
+  const m = my(id), today = new Date().toISOString().slice(0,10);
+  const fmtD = d => d && d.length === 10 ? `${+d.slice(8)}. ${+d.slice(5,7)}. ${d.slice(0,4)}` : "";
+  const mine = `<div class="mine">
+      <button type="button" class="mbtn fav${m.f?" on":""}" id="m-fav" aria-pressed="${!!m.f}">${STAR}${m.f?"Obľúbený":"Obľúbené"}</button>
+      <button type="button" class="mbtn tried${m.t?" on":""}" id="m-tried" aria-pressed="${!!m.t}">${CHECK}${m.t?"Vyskúšané":"Vyskúšať"}</button>
+      ${m.t?`<span class="mdate">${fmtD(m.t)}</span>`:""}</div>
+    <h4>Moja poznámka</h4>
+    <textarea class="mnote" id="m-note" placeholder="Napr. pridal som 50 g tuniaka a bolo to super">${esc(m.n||"")}</textarea>
+    <div class="msaved" id="m-saved"></div>`;
+  $("sb").innerHTML = `${mine}${nut}
     ${missing.size?`<div class="miss" style="margin-top:8px">Chýba: ${[...missing].map(m=>`<span class="m">${esc(m)}</span>`).join("")}</div>`:`<div class="miss" style="margin-top:8px"><span class="h">Máš všetky hlavné suroviny</span></div>`}
     <h4>Suroviny</h4><ul class="ing">${r.s.map(s=>`<li>${esc(s)}</li>`).join("")}</ul>
     <h4>Postup</h4><p>${esc(r.p)}</p>
@@ -444,9 +510,25 @@ function openSheet(id){
     ${r.full?"":`<p class="note">Pri niektorých surovinách nepovedala presné množstvo – pozri video.</p>`}
     <div class="vlinks">${(r.l||[]).map(([n,u])=>`<a class="yt" href="${esc(u)}" target="_blank" rel="noopener">▶ ${esc(n)}</a>`).join("")}</div>`;
   $("sb").scrollTop = 0;
+  $("sb").dataset.id = id;
   $("scrim").classList.add("on"); $("sheet").classList.add("on");
 }
-const closeSheet = () => { $("scrim").classList.remove("on"); $("sheet").classList.remove("on"); };
+$("sb").addEventListener("click", e => {
+  const id = $("sb").dataset.id; if (!id) return;
+  if (e.target.closest("#m-fav")) { setMy(id, {f: my(id).f ? 0 : 1}); openSheetKeep(id); }
+  if (e.target.closest("#m-tried")) { setMy(id, {t: my(id).t ? 0 : new Date().toISOString().slice(0,10)}); openSheetKeep(id); }
+});
+let noteT;
+$("sb").addEventListener("input", e => {
+  if (e.target.id !== "m-note") return;
+  const id = $("sb").dataset.id, v = e.target.value;
+  clearTimeout(noteT); $("m-saved").textContent = "";
+  noteT = setTimeout(() => { setMy(id, {n: v.trim() ? v : 0}); $("m-saved").textContent = "Uložené"; }, 400);
+});
+function openSheetKeep(id){ const st = $("sb").scrollTop; openSheet(id); $("sb").scrollTop = st; refreshLists(); }
+const refreshLists = () => { renderResults(); renderPlan(); };
+const closeSheet0 = () => { $("scrim").classList.remove("on"); $("sheet").classList.remove("on"); };
+const closeSheet = () => { const n = $("m-note"); if (n && $("sb").dataset.id) { clearTimeout(noteT); setMy($("sb").dataset.id, {n: n.value.trim() ? n.value : 0}); } closeSheet0(); refreshLists(); };
 
 $("groups").addEventListener("click", e => {
   const b = e.target.closest(".chip"); if (!b) return;
@@ -455,11 +537,40 @@ $("groups").addEventListener("click", e => {
 });
 $("out").addEventListener("click", e => { const c = e.target.closest(".card"); if (c) openSheet(c.dataset.id); });
 $("tabs").addEventListener("click", e => {
+  const tg = e.target.closest(".tog");
+  if (tg) { if (tg.id === "f-fav") fFav = !fFav; else fTried = !fTried; tg.setAttribute("aria-pressed", tg.id === "f-fav" ? fFav : fTried); renderResults(); return; }
   const b = e.target.closest(".seg"); if (!b) return; cat = b.dataset.k;
-  $("tabs").querySelectorAll(".seg").forEach(t => t.setAttribute("aria-pressed", t === b)); renderResults();
+  $("tabs").querySelectorAll(".seg:not(.tog)").forEach(t => t.setAttribute("aria-pressed", t === b)); renderResults();
 });
 $("onlyfull").addEventListener("change", e => { onlyFull = e.target.checked; renderResults(); });
 $("sort").addEventListener("change", e => { sortBy = e.target.value; renderResults(); });
+/* ---- backup / restore ---- */
+const BKEYS = ["moje.v1","chladnicka.v1","nakup.v1","plan.week"];
+const bmsg = s => { $("bmsg").textContent = s; };
+$("b-save").addEventListener("click", async () => {
+  const data = {app:"recepty-s-chilli", v:1, date:new Date().toISOString(), data:{}};
+  for (const k of BKEYS) { try { const v = localStorage.getItem(k); if (v != null) data.data[k] = v; } catch(e) {} }
+  const txt = JSON.stringify(data), name = `recepty-s-chilli-zaloha-${data.date.slice(0,10)}.json`;
+  const file = new File([txt], name, {type:"application/json"});
+  try {
+    if (navigator.canShare && navigator.canShare({files:[file]})) { await navigator.share({files:[file], title:"Záloha Recepty s Chilli"}); bmsg("Záloha je pripravená. Ulož ju napríklad do Súborov alebo Nextcloudu."); return; }
+  } catch(e) { if (e.name === "AbortError") return; }
+  const a = document.createElement("a"); a.href = URL.createObjectURL(file); a.download = name; document.body.appendChild(a); a.click(); a.remove();
+  bmsg(`Záloha uložená ako ${name}.`);
+});
+$("b-load").addEventListener("click", () => $("f-load").click());
+$("f-load").addEventListener("change", async e => {
+  const f = e.target.files[0]; if (!f) return;
+  try {
+    const d = JSON.parse(await f.text());
+    if (d.app !== "recepty-s-chilli" || !d.data) throw new Error("bad");
+    for (const [k,v] of Object.entries(d.data)) if (BKEYS.includes(k)) localStorage.setItem(k, v);
+    try { MY = JSON.parse(localStorage.getItem(MKEY)) || {}; sel = new Set(JSON.parse(localStorage.getItem(KEY)) || [...PANTRY]); done = JSON.parse(localStorage.getItem(SKEY)) || {}; week = +localStorage.getItem("plan.week") || 0; } catch(e) {}
+    render(); renderPlan(); renderShop();
+    bmsg(`Obnovené zo zálohy z ${new Date(d.date).toLocaleDateString("sk")}.`);
+  } catch(err) { bmsg("Tento súbor nie je záloha z Recepty s Chilli. Vyber súbor, ktorý si uložil tlačidlom Zálohovať."); }
+  e.target.value = "";
+});
 $("rq").addEventListener("input", e => { rq = e.target.value; renderResults(); });
 $("rq").addEventListener("keydown", e => { if (e.key === "Enter") e.target.blur(); });
 $("q").addEventListener("input", e => { q = e.target.value; renderGroups(); });
@@ -520,7 +631,7 @@ function renderPlan(){
     html += `<div class="day${di===today?" today":""}"><div class="dh"><h3>${DAYS[di]}${di===today?"<small>dnes</small>":""}</h3><span>${kc?`${est}${kc.toLocaleString("sk")} kcal · ${b} g bielk.`:""}</span></div>`;
     meals.forEach(([id, note], mi) => {
       const r = byId[id]; if (!r) return;
-      html += `<button type="button" class="meal" data-id="${esc(id)}"><span class="ml">${MEALS[mi]}</span><span class="mi">${svg(recipeIcons(r)[0]||"vajce")}</span><span class="mn">${esc(r.n)}${note?`<small>${esc(note)}</small>`:""}</span><span class="mk">${r.kc!=null?`${approx(r)}${r.kc} kcal<br>${r.b} g bielk.`:""}</span></button>`;
+      html += `<button type="button" class="meal" data-id="${esc(id)}"><span class="ml">${MEALS[mi]}</span><span class="mi">${svg(recipeIcons(r)[0]||"vajce")}</span><span class="mn">${esc(r.n)}${marks(id)}${note?`<small>${esc(note)}</small>`:""}</span><span class="mk">${r.kc!=null?`${approx(r)}${r.kc} kcal<br>${r.b} g bielk.`:""}</span></button>`;
     });
     html += `</div>`;
   });
@@ -550,7 +661,7 @@ const SHOP = [
 ];
 const SKEY = "nakup.v1";
 let done = {}, shopTab = 0;
-try { done = JSON.parse(localStorage.getItem(SKEY)) || {}; } catch(e) {}
+try { done = JSON.parse(localStorage.getItem(SKEY)) || {}; week = +localStorage.getItem("plan.week") || 0; } catch(e) {}
 const saveDone = () => { try { localStorage.setItem(SKEY, JSON.stringify(done)); } catch(e) {} };
 function renderShop(){
   $("sk").querySelectorAll(".seg").forEach(b => b.setAttribute("aria-pressed", +b.dataset.s === shopTab));
