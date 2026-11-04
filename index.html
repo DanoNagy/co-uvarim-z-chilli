@@ -660,7 +660,8 @@ $("q").addEventListener("input", e => { q = e.target.value; renderGroups(); });
 document.querySelectorAll(".clr").forEach(b => {
   const inp = b.parentNode.querySelector("input");
   const sync = () => b.classList.toggle("on", inp.value.length > 0);
-  inp.addEventListener("input", sync);
+  ["input","keyup","change","focus","blur"].forEach(ev => inp.addEventListener(ev, sync));
+  window.addEventListener("pageshow", sync);
   b.addEventListener("pointerdown", e => e.preventDefault());
   b.addEventListener("click", () => { inp.value = ""; inp.dispatchEvent(new Event("input")); inp.focus(); });
   sync();
